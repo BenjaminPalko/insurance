@@ -1,8 +1,5 @@
-import './globals.css'
 import AppBar from "@/components/Nav/AppBar";
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import './globals.css'
 
 export const metadata = {
   title: 'Open Insurance',
@@ -16,11 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-      <AppBar />
-      <div>
-        {children}
-      </div>
+      <body className={'min-h-screen min-w-full overflow-y-auto overflow-x-hidden flex flex-col gap-8'}>
+      <AppBar/>
+      <section className={'max-w-7xl w-full mx-auto bg-gray-700 p-8 rounded mb-8'}>
+          {children}
+      </section>
       </body>
     </html>
   )
