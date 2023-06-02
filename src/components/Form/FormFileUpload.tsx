@@ -67,10 +67,7 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
             }
             return false;
         });
-        setTimeout(() => {
-            setIsUploading(false);
-            clear();
-        }, 1000);
+        setIsUploading(false);
     });
 
     return (
