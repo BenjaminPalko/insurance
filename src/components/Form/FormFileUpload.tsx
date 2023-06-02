@@ -1,4 +1,5 @@
 'use client';
+import axios from "axios";
 import {useEffect, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 
@@ -33,30 +34,27 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
     }
 
     const upload = handleSubmit(data => {
+        setIsUploading(true);
         data.files.every(async (file, index) => {
             try {
                 const form = new FormData();
                 form.append('fileUpload', file);
 
-                const {status} = await fetch(`${process.env.NEXT_PUBLIC_HYGRAPH}/upload`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYGRAPH_ASSET_TOKEN}`,
-                    },
-                    body: form,
-                });
-
-                // const {status} = await axios.post(
-                //     `${process.env.NEXT_PUBLIC_HYGRAPH}/upload`,
-                //     form,
-                //     {
-                //         headers: {
-                //             'Authorization': `Bearer ${process.env.NEXT_PUBLIC_HYGRAPH_ASSET_TOKEN}`,
-                //         },
-                //         onUploadProgress: (progressEvent) => {
-                //             progress[index] = progressEvent.progress || 0
-                //         }
-                //     });
+                const {status} = await axios.post(
+                    `${process.env.NEXT_PUBLIC_HYGRAPH}/upload`,
+                    form,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_HYGRAPH_ASSET_TOKEN}`,
+                        },
+                        onUploadProgress: (progressEvent) => {
+                            setProgress(prevState => {
+                                const progression = [...prevState];
+                                progression[index] = (progressEvent.progress || 0) * 100;
+                                return progression;
+                            });
+                        }
+                    });
                 if (status >= 200 && status < 300) {
                     return true;
                 }
@@ -64,7 +62,7 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                 setIsUploading(false);
             }
             return false;
-        })
+        });
     });
 
     return (
@@ -102,9 +100,9 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                                         className={'flex items-center gap-4 bg-gray-600 p-2 rounded font-light'}>
                                         <p>{`Filename: ${file.name}`}</p>
                                         <div className={'flex-1 flex items-baseline gap-4'}>
-                                            <div className={'w-full bg-gray-400 rounded h-2.5'}>
+                                            <div className={'w-full bg-gray-400 rounded-full h-2.5'}>
                                                 <div
-                                                    className={`bg-blue-700 h-2.5 rounded transition duration-75 w-[${progress[index] || 0}%]`}/>
+                                                    className={`bg-blue-700 h-2.5 rounded-full ${progress[index] ? `w-[${Math.min(progress[index], 100)}%]` : 'w-0'}`}/>
                                             </div>
                                             <p className={'w-8'}>{`${progress[index] || 0}%`}</p>
                                         </div>
@@ -121,8 +119,12 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                                 ))
                             }
                         </ul>
-                        <button className={'rounded py-2 px-3 bg-blue-700 font-medium'} onClick={upload}
-                                disabled={isUploading}>Upload
+                        <button
+                            className={'rounded py-2 px-3 bg-blue-700 disabled:bg-gray-700 font-medium'}
+                            onClick={upload}
+                            disabled={isUploading}
+                        >
+                            Upload
                         </button>
                     </>
                 )
