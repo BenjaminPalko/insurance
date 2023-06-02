@@ -5,7 +5,7 @@ import {usePathname} from "next/navigation";
 
 const links: { href: string, name: string }[] = [
     {href: '/', name: 'Home'},
-    // {href: '/submission', name: 'Submission'}
+    {href: '/submission', name: 'Submission'}
 ]
 
 const AppBar = function () {
