@@ -12,6 +12,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
   return (
     <html lang="en">
     <body className={'min-h-screen min-w-full overflow-y-auto overflow-x-hidden flex flex-col gap-8 pb-8'}>

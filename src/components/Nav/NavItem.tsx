@@ -1,22 +1,20 @@
-import {useRouter} from "next/navigation";
+import Link from "next/link";
 import {PropsWithChildren} from "react";
+import {twMerge} from "tailwind-merge";
 
 interface NavItemProps {
     path: string;
+    className?: string;
+    isCurrent?: boolean;
 }
 
-const NavItem = function ({path, children}: PropsWithChildren<NavItemProps>) {
-
-    const router = useRouter();
-
-    const handleClick = function () {
-        router.push(path)
-    }
+const NavItem = function ({path, className, isCurrent = false, children}: PropsWithChildren<NavItemProps>) {
 
     return (
-        <button onClick={handleClick} className={'flex items-center m-2 py-2 px-3 rounded text-md font-light bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-800 hover:cursor-pointer'}>
+        <Link href={path}
+              className={twMerge(`flex items-center py-2 px-3 rounded text-md font-light bg-gray-300 active:bg-gray-200 ${isCurrent ? 'dark:bg-secondary-main dark:active:bg-secondary-dark' : 'dark:bg-primary-main dark:active:bg-primary-dark'} hover:cursor-pointer`, className)}>
             {children}
-        </button>
+        </Link>
     )
 }
 
