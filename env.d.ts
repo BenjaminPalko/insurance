@@ -1,6 +1,6 @@
 namespace NodeJS {
     interface ProcessEnv {
-        HYGRAPH_READONLY: string;
-        HYGRAPH_ASSET_UPLOAD: string;
+        NEXT_PUBLIC_HYGRAPH: string;
+        NEXT_PUBLIC_HYGRAPH_ASSET_TOKEN: string;
     }
 }
