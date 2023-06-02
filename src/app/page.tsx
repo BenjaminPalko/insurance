@@ -2,7 +2,7 @@ import FormFileUpload from "@/components/Form/FormFileUpload";
 
 export default function Home() {
     return (
-        <main className={'h-screen'}>
+        <main className={''}>
             <FormFileUpload accept={'.xml'}/>
         </main>
     )
