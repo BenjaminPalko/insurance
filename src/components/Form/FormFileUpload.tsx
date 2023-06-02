@@ -1,4 +1,5 @@
 'use client';
+import ProgressBar from "@/components/common/Progress/ProgressBar";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
@@ -99,13 +100,7 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                                     <li key={file.name}
                                         className={'flex items-center gap-4 bg-gray-600 p-2 rounded font-light'}>
                                         <p>{`Filename: ${file.name}`}</p>
-                                        <div className={'flex-1 flex items-baseline gap-4'}>
-                                            <div className={'w-full bg-gray-400 rounded-full h-2.5'}>
-                                                <div
-                                                    className={`bg-blue-700 h-2.5 rounded-full ${progress[index] ? `w-[${Math.min(progress[index], 100)}%]` : 'w-0'}`}/>
-                                            </div>
-                                            <p className={'w-8'}>{`${progress[index] || 0}%`}</p>
-                                        </div>
+                                        <ProgressBar value={progress[index]}/>
                                         <p>{`Size: ${file.size} bytes`}</p>
                                         <p>{`Type: ${file.type}`}</p>
                                         <button
