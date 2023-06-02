@@ -14,7 +14,7 @@ interface FormFileUpload {
 
 const FormFileUpload = function ({accept}: FormFileUpload) {
 
-    const {control, watch, handleSubmit, reset, setValue, formState: {errors}} = useForm<FormValues>({
+    const {control, watch, handleSubmit, resetField, setValue, formState: {errors}} = useForm<FormValues>({
         defaultValues: {
             files: []
         }
@@ -31,7 +31,11 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
     }, [files]);
 
     const removeFile = function (index: number) {
-        setValue("files", [...files].filter((_, i) => i !== index));
+        setValue('files', [...files].filter((_, i) => i !== index));
+    }
+
+    const clear = function () {
+        resetField('files');
     }
 
     const upload = handleSubmit(data => {
@@ -60,10 +64,13 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                     return true;
                 }
             } catch (e) {
-                setIsUploading(false);
             }
             return false;
         });
+        setTimeout(() => {
+            setIsUploading(false);
+            clear();
+        }, 1000);
     });
 
     return (
@@ -114,13 +121,22 @@ const FormFileUpload = function ({accept}: FormFileUpload) {
                                 ))
                             }
                         </ul>
-                        <button
-                            className={'rounded py-2 px-3 bg-blue-700 disabled:bg-gray-700 font-medium'}
-                            onClick={upload}
-                            disabled={isUploading}
-                        >
-                            Upload
-                        </button>
+                        <div className={'w-full flex justify-end gap-3'}>
+                            <button
+                                className={'rounded py-2 px-3 bg-red-600 disabled:bg-gray-600 font-medium'}
+                                onClick={clear}
+                                disabled={isUploading}
+                            >
+                                Clear
+                            </button>
+                            <button
+                                className={'rounded py-2 px-3 bg-blue-700 disabled:bg-gray-600 font-medium'}
+                                onClick={upload}
+                                disabled={isUploading}
+                            >
+                                Upload
+                            </button>
+                        </div>
                     </>
                 )
             }
