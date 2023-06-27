@@ -1,5 +1,7 @@
 'use client';
+import UserAtom from "@/atoms/UserAtom";
 import NavItem from "@/components/Nav/NavItem";
+import {useAtom} from "jotai";
 import {usePathname} from "next/navigation";
 
 
@@ -8,9 +10,25 @@ const links: { href: string, name: string }[] = [
     {href: '/submission', name: 'Submission'}
 ]
 
-const AppBar = function () {
+interface AppBarProps {
+}
 
+const AppBar = function ({}: AppBarProps) {
+
+    const user = useAtom(UserAtom);
     const pathname = usePathname();
+
+    const profileAvatar = function () {
+        if (!user) {
+            return (
+                <NavItem path={'/login'} isCurrent={pathname === '/login'}>Login</NavItem>
+            )
+        } else {
+            return (
+                <NavItem path={'/logout'} isCurrent={pathname === '/logout'}>Logout</NavItem>
+            )
+        }
+    }
 
     return (
         <nav
@@ -21,7 +39,9 @@ const AppBar = function () {
                 ))
             }
             <div className={'flex-1'}/>
-            <NavItem path={'/login'} isCurrent={pathname === '/login'}>Login</NavItem>
+            {
+                profileAvatar()
+            }
         </nav>
     )
 }

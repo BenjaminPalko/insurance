@@ -2,9 +2,9 @@ import UserAtom from "@/atoms/UserAtom";
 import {useSetAtom} from "jotai";
 import {redirect} from "next/navigation";
 
-export default async function Login() {
+export default async function Logout() {
 
     const setUser = useSetAtom(UserAtom)
-    setUser({email: 'test@dev.com'});
+    setUser(null);
     redirect('/');
 }
